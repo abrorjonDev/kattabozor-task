@@ -63,12 +63,12 @@ class DownloaderView(APIView):
         """Checks and saves new products, old saved products don't be updated."""
 
         # need to use for checking if product has already been saved.
-        product_ids = Product.objects.filter(_id__in=_ids).only('_id')
+        product_ids = Product.objects.filter(_id__in=_ids).only('_id').values_list('_id', flat=True)
 
         for product in products_data:
             # I have understood that, I need to download data only, and 
             # no need to update objects all time. 
-            if product['id'] in product_ids.values_list('_id', flat=True):
+            if product['id'] in product_ids:
                 continue
 
             attributes = product.pop('attributes', [])
